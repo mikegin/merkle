@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use generic_array::{GenericArray};
 use hex;
 
-type GenArray = GenericArray<u8, typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UTerm, typenum::bit::B1>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>>;
+type ByteArray = GenericArray<u8, typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UInt<typenum::uint::UTerm, typenum::bit::B1>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>, typenum::bit::B0>>;
 
 #[derive(Debug, Copy, Clone, Hash, Serialize)]
 struct Data {
@@ -19,7 +19,7 @@ fn main() {
     test4();
 }
 
-fn hash_data<T: Hash + Serialize>(data: T) -> GenArray {
+fn hash_data<T: Hash + Serialize>(data: T) -> ByteArray {
     let mut hasher = Sha256::new();
     let bytes = bincode::serialize(&data).unwrap();
     hasher.update(bytes);
@@ -34,7 +34,7 @@ fn create_merkle<T: Hash + Serialize + Clone + Copy>(data: Vec<T>) {
         clone.push(last_element)
     }
 
-    let hash_array: Vec<GenArray> = clone.into_iter().map(|v| hash_data(v)).collect();
+    let hash_array: Vec<ByteArray> = clone.into_iter().map(|v| hash_data(v)).collect();
 
     let hex_array: Vec<String> = hash_array.clone().into_iter().map(|v| hex::encode(v)).collect();
     println!("hex_array {:?}", hex_array);
